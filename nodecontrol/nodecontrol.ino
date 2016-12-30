@@ -7,8 +7,8 @@
 const char* NOMBRE = "NODE 1";
 
 //WIFI
-const char* ssid = "Casa Alonzo";  // nombre Wifi
-const char* password = "LCDCA2016"; // clave Wifi
+const char* ssid = "WIFAI";  // nombre Wifi
+const char* password = "LACLAVEDELWIFAI"; // clave Wifi
 
 // PINES
 const int pines[] = {
@@ -77,6 +77,21 @@ void handleAction(){
   server.send(200, "application/json", res);
 }
 
+void handleOn(){
+  String res = "{\"error_code\":\"101\",\"msg\":\"Success!\"}";
+  for(int i=0; i<pinCount;i++){
+    digitalWrite(pines[i],HIGH);
+  }
+  server.send(200, "application/json", res);
+}
+void handleOff(){
+  String res = "{\"error_code\":\"102\",\"msg\":\"Success!\"}";
+  for(int i=0; i<pinCount;i++){
+    digitalWrite(pines[i],LOW);
+  }
+  server.send(200, "application/json", res);
+}
+
 void handleNotFound(){
   digitalWrite(LED_BUILTIN, 1);
   String message = "File Not Found\n\n";
@@ -126,6 +141,8 @@ void setup(void){
 
   server.on("/", handleRoot);
   server.on("/info",handleInfo);
+  server.on("/all/on",handleOn);
+  server.on("/all/off",handleOff);
   server.on("/action",handleAction);
   server.onNotFound(handleNotFound);
 
